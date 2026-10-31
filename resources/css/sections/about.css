@@ -1,0 +1,138 @@
+/* ==========================================================================
+   Editorial Content Overlay & About Me Section
+   Swiss Minimalist Editorial Style — Sticky Hero Scroll-over Reveal
+   ========================================================================== */
+
+.editorial-content-overlay {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    background-color: #FFFFFF;
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.03);
+}
+
+.about-editorial-section {
+    position: relative;
+    width: 100%;
+    background-color: #FFFFFF;
+    color: #111111;
+    border-top: 1px solid #E5E5E5;
+    padding-top: clamp(4.5rem, 9vw, 8rem);
+    padding-bottom: clamp(4.5rem, 9vw, 8rem);
+}
+
+.about-container {
+    width: 100%;
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1.5rem, 6.5vw, 6.5vw);
+    padding-right: clamp(1.5rem, 6.5vw, 6.5vw);
+}
+
+.about-section-index {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888888;
+    margin-bottom: 1.25rem;
+    display: block;
+}
+
+.about-editorial-heading {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 4.6vw, 4.25rem);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: #000000;
+    margin: 0;
+}
+
+.about-editorial-lead {
+    font-family: var(--font-sans);
+    font-size: clamp(1.125rem, 1.75vw, 1.35rem);
+    font-weight: 500;
+    line-height: 1.55;
+    color: #111111;
+    letter-spacing: -0.01em;
+}
+
+.about-editorial-paragraph {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.8;
+    color: #555555;
+}
+
+/* Quick Facts / Metadata Table */
+.about-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: 1px solid #E5E5E5;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .about-meta-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.about-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.about-meta-label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #888888;
+}
+
+.about-meta-value {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111111;
+}
+
+.about-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #000000;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.about-more-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #000000;
+    transition: width 0.25s ease-out;
+}
+
+.about-more-link:hover::after {
+    width: 100%;
+}
+

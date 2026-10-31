@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Technology Logo Interactive Component
+   Grayscale to Full-Color Brand Hover + Tooltip Interaction
+   ========================================================================== */
+
+.tech-logo-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+.tech-logo-item:focus-visible {
+    outline: 2px solid #111111;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Icon Wrapper & Grayscale State */
+.tech-logo-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    filter: grayscale(100%);
+    opacity: 0.72;
+    transform: scale(1);
+    transition: filter 300ms ease-out, opacity 300ms ease-out, transform 300ms ease-out;
+    will-change: filter, transform;
+}
+
+/* Hover / Focus State: Full Brand Color + 1.08 Scale */
+.tech-logo-item:hover .tech-logo-icon-wrapper,
+.tech-logo-item:focus .tech-logo-icon-wrapper,
+.tech-logo-item:focus-visible .tech-logo-icon-wrapper {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.08);
+}
+
+/* Normalized Vector Image */
+.tech-logo-svg {
+    width: 44px;
+    height: 44px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* Pure CSS Minimalist Tooltip */
+.tech-logo-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background-color: #111111;
+    color: #FFFFFF;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 0.25rem 0.625rem;
+    border-radius: 2px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: opacity 200ms ease-out, transform 200ms ease-out, visibility 200ms ease-out;
+    z-index: 30;
+}
+
+.tech-logo-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px;
+    border-style: solid;
+    border-color: #111111 transparent transparent transparent;
+}
+
+/* Show Tooltip on Hover or Keyboard Focus */
+.tech-logo-item:hover .tech-logo-tooltip,
+.tech-logo-item:focus .tech-logo-tooltip,
+.tech-logo-item:focus-visible .tech-logo-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Mobile Name Label (accessible without hover) */
+.tech-logo-mobile-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: #777777;
+    text-align: center;
+    margin-top: 0.35rem;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .tech-logo-mobile-label {
+        display: none;
+    }
+}
+
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .tech-logo-icon-wrapper,
+    .tech-logo-tooltip {
+        transition: none;
+    }
+
+    .tech-logo-item:hover .tech-logo-icon-wrapper,
+    .tech-logo-item:focus .tech-logo-icon-wrapper,
+    .tech-logo-item:focus-visible .tech-logo-icon-wrapper {
+        transform: none;
+    }
+}
+

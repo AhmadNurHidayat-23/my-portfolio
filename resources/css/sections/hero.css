@@ -1,0 +1,236 @@
+/* ==========================================================================
+   Editorial Hero Section — Strict Visual Reference Matching
+   Reference: Romain Sepehr Vakilitabar
+   ========================================================================== */
+
+.hero-reference-section {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    background-color: #FFFFFF;
+    color: #000000;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container spacing matches reference (6.5% from left) */
+.hero-content-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: clamp(1.5rem, 6.5vw, 6.5vw);
+    padding-right: clamp(1.5rem, 4vw, 4vw);
+    padding-top: clamp(2rem, 16svh, 240px);
+    padding-bottom: clamp(2rem, 6svh, 5rem);
+    z-index: 20;
+}
+
+@media (min-width: 1024px) {
+    .hero-content-wrapper {
+        padding-top: clamp(2.5rem, 28svh, 240px);
+        padding-bottom: clamp(2.5rem, 8svh, 5rem);
+    }
+}
+
+/* Typography — Calligraphic Signature "I am" (Style 01) + Bold Serif Name */
+.hero-headline-container {
+    max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .hero-headline-container {
+        max-width: 56vw;
+    }
+}
+
+.hero-signature-wrap {
+    display: block;
+    width: clamp(200px, 32vw, 480px);
+    margin-left: clamp(-0.5rem, -1vw, -0.25rem);
+    margin-bottom: clamp(-0.35rem, -0.5vw, 0rem);
+    position: relative;
+    z-index: 10;
+    animation: heroFadeIn 0.7s ease-out forwards;
+}
+
+.hero-signature-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    object-position: left bottom;
+}
+
+.hero-editorial-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: clamp(1.85rem, 3.95vw, 4.65rem);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    animation: heroFadeIn 0.75s ease-out forwards;
+}
+
+.hero-name-line {
+    display: block;
+}
+
+@media (min-width: 1024px) {
+    .hero-name-line {
+        white-space: nowrap;
+    }
+}
+
+/* Bottom-Left Navigation — Vertical Stack */
+.hero-bottom-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.125rem;
+    margin-top: 3.5rem;
+    animation: heroFadeIn 0.85s ease-out forwards;
+}
+
+@media (min-width: 1024px) {
+    .hero-bottom-nav {
+        margin-top: auto;
+    }
+}
+
+.hero-vertical-link {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: #000000;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.hero-vertical-link:hover {
+    opacity: 0.6;
+}
+
+.hero-vertical-link.is-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* Rectangular Get in Touch button — 1px black border, 0 radius */
+.hero-touch-rectangle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000000;
+    border-radius: 0;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    padding: 0.625rem 1.625rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.hero-touch-rectangle-btn:hover {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+/* Portrait Photography — True transparent cutout, flush right */
+.hero-portrait-stage {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 65vw;
+    max-width: 360px;
+    height: 55svh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    z-index: 5;
+    pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+    .hero-portrait-stage {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        width: 52vw;
+        max-width: 780px;
+        height: 100%;
+        margin-top: 0;
+        justify-content: flex-end;
+        pointer-events: none;
+    }
+}
+
+.hero-cutout-img {
+    width: auto;
+    height: 100%;
+    max-height: 55svh;
+    object-fit: contain;
+    object-position: right bottom;
+    filter: grayscale(100%);
+    display: block;
+    animation: portraitFadeIn 0.9s ease-out forwards;
+}
+
+@media (min-width: 1024px) {
+    .hero-cutout-img {
+        max-height: 98svh;
+        height: 98svh;
+        width: auto;
+        object-position: right bottom;
+    }
+}
+
+/* Entry Animations */
+@keyframes heroFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes portraitFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-signature-wrap,
+    .hero-editorial-title,
+    .hero-bottom-nav,
+    .hero-cutout-img {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .hero-vertical-link,
+    .hero-touch-rectangle-btn {
+        transition: none;
+    }
+}

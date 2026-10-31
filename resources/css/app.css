@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+@import './components/navbar.css';
+@import './components/technology-logo.css';
+@import './sections/hero.css';
+@import './sections/about.css';
+@import './sections/skills.css';
+@import './components/whatsapp.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-serif: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+    --font-script: 'Pinyon Script', cursive, serif;
+    --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --color-primary: #000000;
+    --color-secondary: #666666;
+    --color-border-subtle: #E5E5E5;
+}
