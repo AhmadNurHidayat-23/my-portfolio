@@ -15,19 +15,13 @@
             alt="{{ $name }} logo"
             class="tech-logo-svg"
             loading="lazy"
-            width="48"
-            height="48"
+            width="52"
+            height="52"
         />
     </div>
 
-    {{-- Interactive Tooltip on Hover / Focus --}}
+    {{-- Interactive Minimalist Tooltip on Hover / Focus / Tap --}}
     <span class="tech-logo-tooltip" role="tooltip" aria-hidden="true">
         {{ $name }}
     </span>
-
-    {{-- Accessible label for touch / mobile screens --}}
-    <span class="tech-logo-mobile-label">
-        {{ $name }}
-    </span>
 </div>
-

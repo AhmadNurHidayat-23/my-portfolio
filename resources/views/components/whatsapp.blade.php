@@ -1,6 +1,6 @@
 @php
     $whatsappNumber = config('portfolio.whatsapp_number');
-    $defaultMessage = config('portfolio.whatsapp_message', 'Hello Ahmad, I would like to discuss a project with you.');
+    $defaultMessage = config('portfolio.whatsapp_message', 'Halo Ahmad, saya melihat portofolio Anda dan tertarik untuk berdiskusi mengenai kerja sama atau proyek.');
     $cleanNumber = $whatsappNumber ? preg_replace('/[^0-9]/', '', $whatsappNumber) : null;
     $whatsappUrl = $cleanNumber
         ? 'https://wa.me/' . $cleanNumber . '?text=' . urlencode($defaultMessage)

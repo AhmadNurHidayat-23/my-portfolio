@@ -1,9 +1,18 @@
 @import 'tailwindcss';
 @import './components/navbar.css';
 @import './components/technology-logo.css';
+@import './components/project-card.css';
+@import './components/certificate-card.css';
+@import './components/service-item.css';
 @import './sections/hero.css';
 @import './sections/about.css';
 @import './sections/skills.css';
+@import './sections/projects.css';
+@import './sections/certificates.css';
+@import './sections/services.css';
+@import './sections/contact.css';
+@import './sections/contact-footer.css';
+@import './pages/project-detail.css';
 @import './components/whatsapp.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

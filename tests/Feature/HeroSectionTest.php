@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
@@ -16,9 +18,17 @@ class HeroSectionTest extends TestCase
         $response->assertSee('Ahmad Nur Hidayat.');
         $response->assertSee('Biography');
         $response->assertSee('CV');
+        $response->assertSee('/documents/CV-Ahmad-Nur-Hidayat.pdf');
         $response->assertSee('Get in touch');
         $response->assertSee('images/ahmad-portrait-cutout.png');
         $response->assertSee('Contact Ahmad on WhatsApp');
+    }
+
+    public function test_cv_pdf_is_accessible(): void
+    {
+        $response = $this->get('/documents/CV-Ahmad-Nur-Hidayat.pdf');
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/pdf');
     }
 
     public function test_blade_views_do_not_contain_inline_styles_or_scripts(): void
@@ -31,4 +41,3 @@ class HeroSectionTest extends TestCase
         $this->assertStringNotContainsString('onclick=', $content);
     }
 }
-

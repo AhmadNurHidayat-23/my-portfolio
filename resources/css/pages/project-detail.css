@@ -1,0 +1,276 @@
+/* ==========================================================================
+   Project Detail Page — Swiss Editorial Minimalist Style
+   Layout for verified case studies and GitHub repository deep-dives
+   ========================================================================== */
+
+.project-detail-main {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #FFFFFF;
+    color: #111111;
+    padding-top: clamp(2rem, 4vw, 3.5rem);
+    padding-bottom: clamp(4.5rem, 8vw, 7rem);
+}
+
+.project-detail-container {
+    width: 100%;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1.25rem, 5vw, 2.5rem);
+    padding-right: clamp(1.25rem, 5vw, 2.5rem);
+}
+
+.project-detail-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #666666;
+    text-decoration: none;
+    margin-bottom: 2.5rem;
+    transition: color 200ms ease;
+}
+
+.project-detail-back-link:hover {
+    color: #000000;
+}
+
+.project-detail-header {
+    border-bottom: 1px solid #E5E5E5;
+    padding-bottom: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.project-detail-category {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888888;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.project-detail-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #000000;
+    margin: 0 0 1.25rem 0;
+    word-break: break-word;
+}
+
+.project-detail-description {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: #444444;
+    max-width: 48rem;
+    margin-bottom: 2rem;
+}
+
+.project-detail-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.project-detail-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    background-color: #111111;
+    border: 1px solid #111111;
+    padding: 0.625rem 1.25rem;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.project-detail-btn-primary:hover {
+    background-color: #333333;
+}
+
+.project-detail-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111111;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    padding: 0.625rem 1.25rem;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: border-color 200ms ease, color 200ms ease;
+}
+
+.project-detail-btn-secondary:hover {
+    border-color: #111111;
+}
+
+/* Detail Spec Grid */
+.project-detail-spec-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid #E5E5E5;
+    margin-bottom: 3.5rem;
+}
+
+@media (min-width: 640px) {
+    .project-detail-spec-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.project-spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.project-spec-label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888888;
+}
+
+.project-spec-value {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #111111;
+}
+
+/* Case Study / GitHub Info Section Content */
+.project-detail-section {
+    margin-bottom: 3.5rem;
+}
+
+.project-detail-section-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111111;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.project-detail-section-body {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: #444444;
+}
+
+.project-detail-features-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.project-detail-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: #333333;
+}
+
+.project-detail-feature-bullet {
+    width: 6px;
+    height: 6px;
+    background-color: #111111;
+    border-radius: 9999px;
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Visuals & Multi-Screen Gallery */
+.project-detail-visuals {
+    margin-bottom: 3.5rem;
+}
+
+.project-detail-hero-media {
+    overflow: hidden;
+    border: 1px solid #E5E5E5;
+    background-color: #F8F8FA;
+    border-radius: 2px;
+}
+
+.project-detail-cover-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+.project-detail-gallery-wrap {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed #E5E5E5;
+}
+
+.project-detail-gallery-tag {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888888;
+    margin-bottom: 1.25rem;
+}
+
+.project-detail-gallery-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.project-detail-gallery-grid.is-mobile-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.project-detail-gallery-grid.is-web-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.project-detail-gallery-item {
+    border: 1px solid #E5E5E5;
+    background-color: #FAFAFA;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.project-detail-gallery-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+

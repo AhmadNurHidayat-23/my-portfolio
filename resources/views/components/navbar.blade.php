@@ -11,7 +11,7 @@
         </div>
 
         <nav class="flex items-center gap-6 lg:gap-8" aria-label="Main Navigation">
-            <a href="#about" class="editorial-nav-link">
+            <a href="{{ request()->is('/') ? '#about' : route('home') . '#about' }}" class="editorial-nav-link">
                 Biography
             </a>
 
@@ -25,7 +25,7 @@
                 </span>
             @endif
 
-            <a href="#contact" class="editorial-nav-link">
+            <a href="{{ request()->is('/') ? '#contact' : route('home') . '#contact' }}" class="editorial-nav-link">
                 Contact
             </a>
         </nav>

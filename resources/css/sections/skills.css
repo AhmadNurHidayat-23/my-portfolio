@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Editorial Skills & Technologies Section
-   Swiss Minimalist Editorial Style — Logo Grid Layout
+   Editorial Skills & Technologies Section — Unified Logo Gallery
+   Swiss Minimalist Editorial Style — Single Responsive CSS Grid
    ========================================================================== */
 
 .skills-editorial-section {
@@ -9,17 +9,17 @@
     background-color: #FFFFFF;
     color: #111111;
     border-top: 1px solid #E5E5E5;
-    padding-top: clamp(4.5rem, 9vw, 8rem);
-    padding-bottom: clamp(4.5rem, 9vw, 8rem);
+    padding-top: clamp(4rem, 7vw, 6.5rem);
+    padding-bottom: clamp(4rem, 7vw, 6.5rem);
 }
 
 .skills-container {
     width: 100%;
-    max-width: 1440px;
+    max-width: 1280px;
     margin-left: auto;
     margin-right: auto;
-    padding-left: clamp(1.5rem, 6.5vw, 6.5vw);
-    padding-right: clamp(1.5rem, 6.5vw, 6.5vw);
+    padding-left: clamp(1.25rem, 5vw, 2.5rem);
+    padding-right: clamp(1.25rem, 5vw, 2.5rem);
 }
 
 .skills-section-index {
@@ -53,63 +53,41 @@
     max-width: 38rem;
 }
 
-/* Category Rows & Dividers */
-.skills-list-wrapper {
-    margin-top: clamp(3rem, 6vw, 5rem);
-    border-top: 1px solid #E5E5E5;
+.skills-header-wrapper {
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
 
-.skills-category-row {
-    border-bottom: 1px solid #E5E5E5;
-    padding-top: clamp(2rem, 3.5vw, 3rem);
-    padding-bottom: clamp(2rem, 3.5vw, 3rem);
+/* ==========================================================================
+   Unified Responsive Technology Grid
+   Mobile: 3 cols | Tablet: 4-5 cols | Desktop: 6 cols
+   ========================================================================== */
+
+.skills-unified-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem 1rem;
     align-items: center;
-}
-
-@media (min-width: 1024px) {
-    .skills-category-row {
-        grid-template-columns: 18rem 1fr;
-        gap: 3.5rem;
-    }
-}
-
-.skills-category-header {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-}
-
-.skills-category-numeral {
-    font-family: var(--font-mono, monospace);
-    font-size: 0.75rem;
-    color: #999999;
-}
-
-.skills-category-title {
-    font-family: var(--font-sans);
-    font-size: 1.0625rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: #000000;
-    margin: 0;
-}
-
-/* Logos Flex Container inside Category */
-.skills-logos-flex {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem 0.75rem;
-    align-items: center;
+    justify-items: center;
+    width: 100%;
 }
 
 @media (min-width: 640px) {
-    .skills-logos-flex {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: clamp(1.5rem, 2.5vw, 2.75rem);
+    .skills-unified-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 2rem 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .skills-unified-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 2.25rem 1.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .skills-unified-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 2.75rem 2rem;
     }
 }

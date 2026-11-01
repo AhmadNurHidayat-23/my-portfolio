@@ -1,0 +1,191 @@
+/* ==========================================================================
+   4-Column Editorial Footer Information & Bottom Bar
+   Swiss Editorial Minimalist — Information Architecture
+   ========================================================================== */
+
+/* 4-Column Footer Information */
+.contact-info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding-top: clamp(1.25rem, 2.2vh, 1.85rem);
+    padding-bottom: clamp(1.25rem, 2.2vh, 1.85rem);
+    border-top: 1px solid #404040;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    .contact-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem 2.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .contact-info-grid {
+        grid-template-columns: 1.35fr 1fr 1fr 1.35fr;
+        gap: clamp(1.5rem, 2.5vw, 3rem);
+    }
+}
+
+.contact-identity-name {
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 1.35vw, 1.35rem);
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.01em;
+}
+
+.contact-identity-role {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #A3A3A3;
+    margin: 0 0 0.35rem 0;
+}
+
+.contact-identity-tagline {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: #737373;
+    line-height: 1.45;
+    margin: 0;
+    max-width: 18rem;
+}
+
+.contact-identity-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.55rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: #888888;
+    letter-spacing: 0.02em;
+}
+
+.contact-location-icon {
+    width: 13px;
+    height: 13px;
+    color: #888888;
+    flex-shrink: 0;
+}
+
+.contact-col-title {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #737373;
+    margin: 0 0 0.6rem 0;
+}
+
+.contact-text-list,
+.contact-nav-list,
+.contact-social-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.contact-text-list li {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    color: #A3A3A3;
+    line-height: 1.45;
+}
+
+.contact-footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: #A3A3A3;
+    text-decoration: none;
+    transition: color 200ms ease;
+    width: fit-content;
+}
+
+.contact-footer-link:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.contact-email-link {
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
+}
+
+@media (min-width: 1024px) {
+    .contact-email-link {
+        white-space: nowrap;
+    }
+}
+
+.contact-link-arrow {
+    display: inline-block;
+    font-size: 0.6875rem;
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-footer-link:hover .contact-link-arrow { transform: translate(2px, -2px); }
+
+/* Bottom Bar: Copyright & Back To Top */
+.contact-bottom-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: clamp(0.75rem, 1.4vh, 1.15rem);
+    border-top: 1px solid #404040;
+}
+
+@media (min-width: 640px) {
+    .contact-bottom-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.contact-copyright {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: #737373;
+    margin: 0;
+}
+
+.contact-back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #A3A3A3;
+    text-decoration: none;
+    transition: color 200ms ease;
+}
+
+.contact-back-to-top:hover { color: #FFFFFF; }
+.contact-top-arrow { display: inline-block; transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1); }
+.contact-back-to-top:hover .contact-top-arrow { transform: translateY(-2px); }
+
+@media (prefers-reduced-motion: reduce) {
+    .contact-primary-btn,
+    .contact-btn-arrow,
+    .contact-footer-link,
+    .contact-link-arrow,
+    .contact-back-to-top,
+    .contact-top-arrow { transition: none; }
+    .contact-primary-btn:hover .contact-btn-arrow,
+    .contact-footer-link:hover .contact-link-arrow,
+    .contact-back-to-top:hover .contact-top-arrow { transform: none; }
+}
+

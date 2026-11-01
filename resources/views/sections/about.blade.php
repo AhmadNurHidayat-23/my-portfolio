@@ -15,15 +15,15 @@
             {{-- Right Column: Biography Content & Details --}}
             <div class="lg:col-span-7 flex flex-col gap-6">
                 <p class="about-editorial-lead">
-                    I am Ahmad Nur Hidayat, a web developer and programmer focused on engineering clean, dependable, and thoughtfully crafted web applications.
+                    I am Ahmad Nur Hidayat, a Web & Mobile Developer and Diploma III Informatics Engineering student at Politeknik Negeri Cilacap, passionate about building modern, functional, and meaningful digital experiences.
                 </p>
 
                 <p class="about-editorial-paragraph">
-                    My development methodology centers on structural clarity, maintainability, and precise execution. Working primarily within the modern PHP and Laravel ecosystem alongside utility-first CSS, I build applications that prioritize stability, seamless responsiveness, and long-term readability over unnecessary complexity.
+                    I focus on developing responsive web applications, mobile applications, reliable backend systems, and intuitive user interfaces. Working with technologies such as PHP, Laravel, and modern development tools, I aim to create solutions that are efficient, maintainable, and built with attention to detail.
                 </p>
 
                 <p class="about-editorial-paragraph">
-                    I view software design through the lens of Swiss typography: eliminating noise, honoring whitespace, and ensuring that every component serves a distinct purpose.
+                    For me, software development is more than just writing code. It's about solving real problems, creating better user experiences, and continuously learning to turn ideas into meaningful digital solutions.
                 </p>
 
                 {{-- Editorial Metadata Grid --}}
@@ -35,17 +35,17 @@
 
                     <div class="about-meta-item">
                         <span class="about-meta-label">Primary Role</span>
-                        <span class="about-meta-value">Web Developer / Programmer</span>
+                        <span class="about-meta-value">Web & Mobile Developer</span>
                     </div>
 
                     <div class="about-meta-item">
                         <span class="about-meta-label">Core Focus</span>
-                        <span class="about-meta-value">Web Applications & Backend Systems</span>
+                        <span class="about-meta-value">Web, Mobile & Backend</span>
                     </div>
 
                     <div class="about-meta-item">
                         <span class="about-meta-label">Status</span>
-                        <span class="about-meta-value">Available for Projects & Roles</span>
+                        <span class="about-meta-value">Open for Opportunities & Collaboration</span>
                     </div>
                 </div>
 

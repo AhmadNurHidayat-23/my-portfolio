@@ -17,31 +17,28 @@ class AboutSkillsTest extends TestCase
         $response->assertSee('A little');
         $response->assertSee('about me.');
         $response->assertSee('Ahmad Nur Hidayat');
-        $response->assertSee('Web Developer / Programmer');
+        $response->assertSee('Web & Mobile Developer', false);
+        $response->assertSee('Web, Mobile & Backend', false);
+        $response->assertSee('Open for Opportunities & Collaboration', false);
 
         // Verify Skills Section & Header
         $response->assertSee('id="skills"', false);
         $response->assertSee('Tools & Technologies.', false);
-        $response->assertSee('Frontend Development');
-        $response->assertSee('Backend Development');
-        $response->assertSee('Programming Languages');
-        $response->assertSee('Mobile Development');
-        $response->assertSee('Database');
-        $response->assertSee('Development Tools');
+        $response->assertSee('skills-unified-grid', false);
+        $response->assertDontSee('skills-category-row', false);
 
-        // Verify New Technologies requested
-        $response->assertSee('React');
-        $response->assertSee('Flutter');
-        $response->assertSee('C++');
-
-        // Verify Retained Technologies
+        // Verify Required Technologies
         $response->assertSee('HTML5');
         $response->assertSee('CSS3');
         $response->assertSee('JavaScript');
+        $response->assertSee('React');
         $response->assertSee('Tailwind CSS');
         $response->assertSee('Blade');
         $response->assertSee('PHP');
         $response->assertSee('Laravel');
+        $response->assertSee('C++');
+        $response->assertSee('Flutter');
+        $response->assertSee('Dart');
         $response->assertSee('MySQL');
         $response->assertSee('MariaDB');
         $response->assertSee('Git');

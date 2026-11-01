@@ -1,0 +1,163 @@
+/* ==========================================================================
+   Full-Screen Editorial Contact Section — Swiss Editorial Minimalist
+   Dark backdrop (#111111) filling exactly one viewport on desktop
+   ========================================================================== */
+
+.contact-editorial-section {
+    position: relative;
+    width: 100%;
+    background-color: #111111;
+    color: #FFFFFF;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+    box-sizing: border-box;
+    scroll-margin-top: 0;
+}
+
+@media (min-width: 1024px) {
+    .contact-editorial-section {
+        min-height: 100dvh;
+        padding-top: clamp(2rem, 3.8vh, 3.25rem);
+        padding-bottom: clamp(1.25rem, 2.4vh, 2rem);
+    }
+}
+
+.contact-container {
+    width: 100%;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1.25rem, 5vw, 2.5rem);
+    padding-right: clamp(1.25rem, 5vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+}
+
+/* Top Eyebrow & Collaboration Status */
+.contact-eyebrow-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: clamp(0.85rem, 2vh, 1.5rem);
+}
+
+.contact-section-index {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888888;
+}
+
+.contact-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #A3A3A3;
+    padding: 0.25rem 0.7rem;
+    border: 1px solid #333333;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 0.03);
+    white-space: nowrap;
+}
+
+.contact-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background-color: #22C55E;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+    display: inline-block;
+}
+
+/* Main CTA Heading & Action Block */
+.contact-cta-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: clamp(1.25rem, 2.5vh, 2rem);
+}
+
+@media (min-width: 860px) {
+    .contact-cta-wrapper {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 2.5rem;
+    }
+}
+
+.contact-heading-group {
+    flex: 1;
+    min-width: 0;
+}
+
+.contact-editorial-heading {
+    font-family: var(--font-serif);
+    font-size: clamp(2.25rem, 3.8vw, 3.85rem);
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin: 0 0 0.75rem 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-heading-white { color: #FFFFFF; }
+.contact-heading-muted { color: #A3A3A3; }
+
+@media (min-width: 860px) {
+    .contact-heading-white,
+    .contact-heading-muted {
+        white-space: nowrap;
+    }
+}
+
+.contact-editorial-description {
+    font-family: var(--font-sans);
+    font-size: clamp(0.9375rem, 1.15vw, 1.0625rem);
+    font-weight: 400;
+    line-height: 1.55;
+    color: #A3A3A3;
+    max-width: 42rem;
+    margin: 0;
+}
+
+.contact-action-group {
+    flex-shrink: 0;
+    padding-bottom: 0.25rem;
+}
+
+.contact-primary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background-color: #FFFFFF;
+    color: #111111;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0.85rem 1.85rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: background-color 200ms ease, opacity 200ms ease;
+    white-space: nowrap;
+}
+
+.contact-primary-btn:hover { background-color: #E5E5E5; }
+.contact-btn-arrow { display: inline-block; transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1); }
+.contact-primary-btn:hover .contact-btn-arrow { transform: translate(2px, -2px); }

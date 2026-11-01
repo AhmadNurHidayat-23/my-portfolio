@@ -1,0 +1,68 @@
+/* ==========================================================================
+   Service Item Component — Swiss Editorial Minimalist
+   Typography-driven service layout with horizontal rhythm lines
+   ========================================================================== */
+
+.service-item {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: transparent;
+    border-top: 1px solid #EAEAEA;
+    padding-top: clamp(2.25rem, 4vw, 3.25rem);
+    padding-bottom: clamp(2.25rem, 4vw, 3.25rem);
+    transition: border-color 200ms ease;
+}
+
+.service-item:hover {
+    border-top-color: #AAAAAA;
+}
+
+.service-item-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 0.85rem;
+}
+
+.service-item-number {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888888;
+}
+
+.service-item-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.4rem, 2.3vw, 1.85rem);
+    font-weight: 700;
+    line-height: 1.22;
+    color: #111111;
+    letter-spacing: -0.015em;
+    margin: 0;
+    transition: color 200ms ease;
+}
+
+.service-item:hover .service-item-title {
+    color: #000000;
+}
+
+.service-item-description {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: #666666;
+    line-height: 1.65;
+    margin: 0;
+    max-width: 32rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .service-item,
+    .service-item-title {
+        transition: none;
+    }
+}
+

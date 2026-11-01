@@ -35,4 +35,14 @@ return [
         ],
     ],
 
+    'github' => [
+        'username' => env('GITHUB_USERNAME', 'AhmadNurHidayat-23'),
+        'token' => env('GITHUB_TOKEN'),
+        'collaborations' => [
+            'FauruxD/Movix_v2',
+            'FauruxD/Pweb',
+            'FauruxD/WEB_FILM',
+        ],
+    ],
+
 ];
