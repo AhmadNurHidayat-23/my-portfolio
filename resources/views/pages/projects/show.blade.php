@@ -18,7 +18,15 @@
     $isCollaborator = (bool) ($project['is_collaborator'] ?? false);
     $defaultBranch = (string) ($project['default_branch'] ?? 'main');
     $license = (string) ($project['license_name'] ?? 'Open Source');
+
+    $seoTitle = "{$name} — Ahmad Nur Hidayat | Web & Mobile Developer";
+    $seoDescription = \Illuminate\Support\Str::limit(!empty($overview) ? $overview : $description, 155);
+    $seoImage = $imageUrl ? (str_starts_with($imageUrl, 'http') ? $imageUrl : asset($imageUrl)) : asset('images/ahmad-portrait-cutout.png');
 @endphp
+
+@section('title', $seoTitle)
+@section('description', $seoDescription)
+@section('image', $seoImage)
 
 @section('content')
     <x-navbar />
@@ -109,12 +117,30 @@
             @if ($imageUrl)
                 <section class="project-detail-visuals" aria-label="Project Visual Showcase">
                     <div class="project-detail-hero-media">
-                        <img
-                            src="{{ $imageUrl }}"
-                            alt="Visual showcase of {{ $name }}"
-                            loading="eager"
-                            class="project-detail-cover-image"
-                        />
+                        @php
+                            $urlPath = parse_url($imageUrl, PHP_URL_PATH);
+                            $relativeImg = $urlPath ? ltrim($urlPath, '/') : null;
+                            $webpRelative = $relativeImg ? preg_replace('/\.(png|jpe?g)$/i', '.webp', $relativeImg) : null;
+                            $hasWebp = $webpRelative && file_exists(public_path($webpRelative));
+                        @endphp
+                        @if ($hasWebp)
+                            <picture>
+                                <source srcset="{{ asset($webpRelative) }}" type="image/webp">
+                                <img
+                                    src="{{ $imageUrl }}"
+                                    alt="Visual showcase of {{ $name }}"
+                                    loading="eager"
+                                    class="project-detail-cover-image"
+                                />
+                            </picture>
+                        @else
+                            <img
+                                src="{{ $imageUrl }}"
+                                alt="Visual showcase of {{ $name }}"
+                                loading="eager"
+                                class="project-detail-cover-image"
+                            />
+                        @endif
                     </div>
 
                     @if (count($galleryImages) > 1)

@@ -1,0 +1,108 @@
+# ==============================================================================
+# Ahmad Nur Hidayat — Personal Portfolio
+# Multi-stage Dockerfile for Vercel Container Runtime
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Stage 1: Build Frontend Assets (Vite + Tailwind CSS v4)
+# ------------------------------------------------------------------------------
+FROM node:22-alpine AS frontend-builder
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy configuration and source files required for building assets
+COPY vite.config.js ./
+COPY resources ./resources
+COPY public ./public
+
+# Build Vite assets into /app/public/build
+RUN npm run build
+
+# ------------------------------------------------------------------------------
+# Stage 2: Production PHP 8.3 + Nginx Alpine Runtime
+# ------------------------------------------------------------------------------
+FROM php:8.3-fpm-alpine
+
+LABEL maintainer="Ahmad Nur Hidayat"
+LABEL description="Ahmad Nur Hidayat Personal Portfolio on Vercel Container Runtime"
+
+# Install system dependencies and Nginx
+RUN apk add --no-cache \
+    nginx \
+    curl \
+    git \
+    unzip \
+    libpng \
+    libwebp \
+    libjpeg-turbo \
+    freetype \
+    icu-data-full
+
+# Install PHP extensions using official installer script
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN install-php-extensions \
+    bcmath \
+    curl \
+    fileinfo \
+    gd \
+    intl \
+    mbstring \
+    opcache \
+    pdo \
+    pdo_sqlite \
+    sqlite3 \
+    xml \
+    zip
+
+# Copy Composer binary from official composer image
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+
+# Install PHP dependencies first to leverage Docker layer caching
+COPY composer.json composer.lock ./
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-scripts
+
+# Copy application source code
+COPY . /app
+
+# Copy built frontend assets from frontend-builder stage
+COPY --from=frontend-builder /app/public/build /app/public/build
+
+# Complete composer autoloading for production
+RUN composer dump-autoload --optimize --no-dev
+
+# Setup Nginx configuration and entrypoint script
+COPY docker/nginx.conf /etc/nginx/http.d/default.conf
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Ensure storage and bootstrap directories exist with proper permissions
+RUN mkdir -p \
+    /app/storage/framework/cache/data \
+    /app/storage/framework/sessions \
+    /app/storage/framework/views \
+    /app/storage/logs \
+    /app/bootstrap/cache \
+    && chmod -R 777 /app/storage /app/bootstrap/cache
+
+# Stateless production environment defaults
+ENV APP_ENV=production \
+    APP_DEBUG=false \
+    SESSION_DRIVER=cookie \
+    CACHE_STORE=file \
+    LOG_CHANNEL=stderr
+
+# Expose default port (Vercel assigns PORT dynamically via $PORT)
+EXPOSE 80
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

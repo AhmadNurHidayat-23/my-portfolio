@@ -16,12 +16,28 @@
     {{-- Left: Certificate Preview Frame --}}
     <div class="certificate-media-wrapper">
         @if ($image)
-            <img
-                src="{{ asset($image) }}?v={{ $imageVersion }}"
-                alt="{{ $title }} - {{ $issuer }}"
-                loading="lazy"
-                class="certificate-image"
-            />
+            @php
+                $webpImage = preg_replace('/\.(png|jpe?g)$/i', '.webp', $image);
+                $hasWebp = file_exists(public_path($webpImage));
+            @endphp
+            @if ($hasWebp)
+                <picture>
+                    <source srcset="{{ asset($webpImage) }}?v={{ $imageVersion }}" type="image/webp">
+                    <img
+                        src="{{ asset($image) }}?v={{ $imageVersion }}"
+                        alt="{{ $title }} - {{ $issuer }}"
+                        loading="lazy"
+                        class="certificate-image"
+                    />
+                </picture>
+            @else
+                <img
+                    src="{{ asset($image) }}?v={{ $imageVersion }}"
+                    alt="{{ $title }} - {{ $issuer }}"
+                    loading="lazy"
+                    class="certificate-image"
+                />
+            @endif
         @else
             <div class="certificate-placeholder" aria-hidden="true">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">

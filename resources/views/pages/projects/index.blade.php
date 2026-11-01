@@ -4,6 +4,9 @@
     $totalCount = count($projects);
 @endphp
 
+@section('title', 'All Projects — Ahmad Nur Hidayat | Web & Mobile Developer')
+@section('description', 'Browse all ' . $totalCount . ' public software, web, and mobile projects developed by Ahmad Nur Hidayat.')
+
 @section('content')
     <x-navbar />
 

@@ -3,8 +3,39 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Ahmad Nur Hidayat — Web Developer & Portfolio">
-    <title>{{ $title ?? 'Ahmad Nur Hidayat | Web Developer' }}</title>
+    
+    @php
+        $defaultTitle = 'Ahmad Nur Hidayat | Web & Mobile Developer';
+        $rawTitle = View::hasSection('title') ? trim(View::yieldContent('title')) : ($title ?? $defaultTitle);
+        $pageTitle = html_entity_decode($rawTitle, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        $defaultDesc = 'Ahmad Nur Hidayat — Web & Mobile Developer. Personal portfolio showcasing web, mobile, and backend applications, technical skills, and verified credentials.';
+        $rawDesc = View::hasSection('description') ? trim(View::yieldContent('description')) : ($description ?? $defaultDesc);
+        $pageDescription = html_entity_decode($rawDesc, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        $pageImage = View::hasSection('image') ? trim(View::yieldContent('image')) : ($image ?? asset('images/ahmad-portrait-cutout.png'));
+        $canonicalUrl = $canonical ?? url()->current();
+        $siteName = 'Ahmad Nur Hidayat — Portfolio';
+    @endphp
+
+    <title>{{ $pageTitle }}</title>
+    <meta name="description" content="{{ $pageDescription }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+
+    {{-- Open Graph / Facebook --}}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ $canonicalUrl }}">
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $pageDescription }}">
+    <meta property="og:image" content="{{ $pageImage }}">
+    <meta property="og:site_name" content="{{ $siteName }}">
+
+    {{-- Twitter / X Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ $canonicalUrl }}">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $pageDescription }}">
+    <meta name="twitter:image" content="{{ $pageImage }}">
 
     {{-- Portfolio Favicon (Final Logo TAB) --}}
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}?v=20261031c">

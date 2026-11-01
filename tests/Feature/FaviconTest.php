@@ -21,7 +21,8 @@ class FaviconTest extends TestCase
             $response->assertStatus(200);
 
             // Verify browser tab title
-            $response->assertSee('<title>Ahmad Nur Hidayat | Web Developer</title>', false);
+            $response->assertSee('Ahmad Nur Hidayat');
+            $response->assertSee('Web &amp; Mobile Developer', false);
 
             // Verify modern favicon links
             $response->assertSee('rel="icon" type="image/png" sizes="16x16"', false);

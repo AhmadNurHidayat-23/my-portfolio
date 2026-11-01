@@ -46,12 +46,17 @@
 
     {{-- Right Area: Large Cutout Portrait Photography --}}
     <div class="hero-portrait-stage">
-        <img
-            src="{{ asset('images/ahmad-portrait-cutout.png') }}"
-            alt="Ahmad Nur Hidayat — Portrait"
-            class="hero-cutout-img"
-            loading="eager"
-            fetchpriority="high"
-        />
+        <picture>
+            <source srcset="{{ asset('images/ahmad-portrait-cutout.webp') }}" type="image/webp">
+            <img
+                src="{{ asset('images/ahmad-portrait-cutout.png') }}"
+                alt="Ahmad Nur Hidayat — Portrait"
+                class="hero-cutout-img"
+                loading="eager"
+                fetchpriority="high"
+                width="996"
+                height="1208"
+            />
+        </picture>
     </div>
 </section>

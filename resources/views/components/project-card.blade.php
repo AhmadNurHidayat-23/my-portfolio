@@ -17,12 +17,30 @@
     <div class="project-card-media">
         <a href="{{ $detailRoute }}" class="project-card-media-link" aria-label="View details for {{ $name }}">
             @if ($imageUrl)
-                <img
-                    src="{{ $imageUrl }}"
-                    alt="Screenshot of {{ $name }}"
-                    loading="lazy"
-                    class="project-card-image"
-                />
+                @php
+                    $urlPath = parse_url($imageUrl, PHP_URL_PATH);
+                    $relativeImg = $urlPath ? ltrim($urlPath, '/') : null;
+                    $webpRelative = $relativeImg ? preg_replace('/\.(png|jpe?g)$/i', '.webp', $relativeImg) : null;
+                    $hasWebp = $webpRelative && file_exists(public_path($webpRelative));
+                @endphp
+                @if ($hasWebp)
+                    <picture>
+                        <source srcset="{{ asset($webpRelative) }}" type="image/webp">
+                        <img
+                            src="{{ $imageUrl }}"
+                            alt="Screenshot of {{ $name }}"
+                            loading="lazy"
+                            class="project-card-image"
+                        />
+                    </picture>
+                @else
+                    <img
+                        src="{{ $imageUrl }}"
+                        alt="Screenshot of {{ $name }}"
+                        loading="lazy"
+                        class="project-card-image"
+                    />
+                @endif
             @else
                 <div class="project-card-placeholder">
                     <div class="project-placeholder-inner">
