@@ -22,6 +22,6 @@ I enjoy turning ideas into functional digital solutions, solving real-world prob
 
 I'm open to opportunities, freelance projects, and collaborations.
 
-- **Email:** [nurhidayata062@gmail.com](mailto:nurhidayata062@gmail.com)
+- **Email:** [nurhidayata062.stu@pnc.ac.id](mailto:nurhidayata062.stu@pnc.ac.id)
 - **LinkedIn:** [Ahmad Nur Hidayat](https://www.linkedin.com/in/ahmad-nur-hidayat-071169414/)
 - **GitHub:** [AhmadNurHidayat-23](https://github.com/AhmadNurHidayat-23)

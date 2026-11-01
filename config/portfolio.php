@@ -14,7 +14,7 @@ return [
     'whatsapp_number' => env('WHATSAPP_NUMBER', '6282126824313'),
     'whatsapp_message' => env('WHATSAPP_DEFAULT_MESSAGE', 'Halo Ahmad, saya melihat portofolio Anda dan tertarik untuk berdiskusi mengenai kerja sama atau proyek.'),
     'cv_url' => env('PORTFOLIO_CV_URL', '/documents/CV-Ahmad-Nur-Hidayat.pdf'),
-    'email' => env('PORTFOLIO_EMAIL', 'nurhidayata062@gmail.com'),
+    'email' => env('PORTFOLIO_EMAIL', 'nurhidayata062.stu@pnc.ac.id'),
 
     /*
     |--------------------------------------------------------------------------

@@ -54,8 +54,8 @@ class ContactSectionTest extends TestCase
 
         // Column 4: Let's Connect
         $response->assertSee("Let's Connect", false);
-        $response->assertSee('mailto:nurhidayata062@gmail.com', false);
-        $response->assertSee('nurhidayata062@gmail.com');
+        $response->assertSee('mailto:nurhidayata062.stu@pnc.ac.id', false);
+        $response->assertSee('nurhidayata062.stu@pnc.ac.id');
         $response->assertSee('https://www.linkedin.com/in/ahmad-nur-hidayat-071169414/');
         $response->assertSee('https://github.com/AhmadNurHidayat-23');
 

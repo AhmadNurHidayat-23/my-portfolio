@@ -6,7 +6,7 @@
         ? 'https://wa.me/' . $cleanNumber . '?text=' . urlencode($defaultMessage)
         : '#contact';
     $isWhatsappExternal = !empty($cleanNumber);
-    $email = config('portfolio.email', 'nurhidayata062@gmail.com');
+    $email = config('portfolio.email', 'nurhidayata062.stu@pnc.ac.id');
     $currentYear = date('Y');
 @endphp
 
