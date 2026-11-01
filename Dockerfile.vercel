@@ -22,9 +22,9 @@ COPY public ./public
 RUN npm run build
 
 # ------------------------------------------------------------------------------
-# Stage 2: Production PHP 8.3 + Nginx Alpine Runtime
+# Stage 2: Production PHP 8.4 + Nginx Alpine Runtime
 # ------------------------------------------------------------------------------
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 LABEL maintainer="Ahmad Nur Hidayat"
 LABEL description="Ahmad Nur Hidayat Personal Portfolio on Vercel Container Runtime"
