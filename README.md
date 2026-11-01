@@ -2,7 +2,7 @@
 
 **Web & Mobile Developer | Informatics Engineering Student**
 
-🌐 **Live Portfolio:** [ahmadnurhidayat.vercel.app](https://ahmadnurhidayat.vercel.app/)
+**Live Portfolio:** [ahmadnurhidayat.vercel.app](https://ahmadnurhidayat.vercel.app/)
 
 Welcome to my personal portfolio.
 
