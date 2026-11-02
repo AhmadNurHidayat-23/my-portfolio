@@ -28,7 +28,7 @@ Route::get('/documents/{filename}', function (string $filename) {
 
 Route::get('/sitemap.xml', function (GitHubRepositoryService $gitHubService, ProjectCurationService $curationService) {
     $projects = collect($gitHubService->getAll())
-        ->filter(fn ($p) => ! $curationService->isRepositoryHidden($p['slug'] ?? $p['name'] ?? ''))
+        ->filter(fn ($p) => ! $curationService->isRepositoryHidden($p['slug'] ?? $p['name'] ?? '') && $curationService->isRepositoryAllowed($p['slug'] ?? $p['name'] ?? ''))
         ->values();
 
     return response()

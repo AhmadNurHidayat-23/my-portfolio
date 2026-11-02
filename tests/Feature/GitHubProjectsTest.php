@@ -16,6 +16,9 @@ class GitHubProjectsTest extends TestCase
         parent::setUp();
         Cache::forget(GitHubRepositoryService::CACHE_KEY);
         Cache::forget(GitHubRepositoryService::FALLBACK_CACHE_KEY);
+        Http::fake([
+            'https://api.github.com/*' => Http::response('Mocked Fallback', 403),
+        ]);
     }
 
     public function test_home_page_renders_selected_work_section_with_all_repositories(): void
@@ -43,6 +46,10 @@ class GitHubProjectsTest extends TestCase
         $response->assertSee('Website portofolio pribadi untuk menampilkan profil, keahlian, dan proyek pengembangan web.');
         $response->assertSee('Platform edukasi dan skrining awal stunting untuk membantu pemantauan pertumbuhan serta kesehatan anak.');
         $response->assertSee('Platform streaming film berbasis web untuk menjelajahi koleksi film dan menikmati tontonan favorit.');
+
+        $response->assertSee('All Repositories');
+        $response->assertSee('https://github.com/AhmadNurHidayat-23?tab=repositories');
+        $response->assertSee('rel="noopener noreferrer"', false);
     }
 
     public function test_priority_projects_are_ordered_at_the_top(): void
@@ -75,28 +82,27 @@ class GitHubProjectsTest extends TestCase
         $response->assertSee('Platform edukasi dan skrining awal stunting untuk membantu pemantauan pertumbuhan serta kesehatan anak.');
         $response->assertSee('Platform streaming film berbasis web untuk menjelajahi koleksi film dan menikmati tontonan favorit.');
         $response->assertSee('Back to Portfolio');
+
+        $response->assertSee('All Repositories');
+        $response->assertSee('https://github.com/AhmadNurHidayat-23?tab=repositories');
+        $response->assertSee('rel="noopener noreferrer"', false);
     }
 
     public function test_hidden_repositories_are_excluded_from_views_and_return_404(): void
     {
         $hiddenSlugs = [
-            'pweb',
-            'web-film',
-            'movix-v2',
-            'movix-fix',
-            'ahmadnurhidayat-23githubio',
-            'ahmadnurhidayat-23.github.io',
-            'siroyo',
-            'ahmadnurhidayat-23',
+            'pweb', 'web-film', 'movix-v2', 'movix-fix', 'ahmadnurhidayat-23githubio',
+            'ahmadnurhidayat-23.github.io', 'siroyo', 'ahmadnurhidayat-23',
+            'rupakata-pembuat-poster-tipografi', 'passcraft-secure-password-generator',
+            'paletteforge-generator-palet-warna', 'taskly-sistem-manajemen-tugas',
+            'shortify-sistem-penyingkat-tautan', 'devlinks-sistem-manajemen-tautan-profil',
         ];
 
         $hiddenProjectCardTitles = [
-            'Pweb',
-            'WEB_FILM',
-            'Movix_v2',
-            'Movix_Fix',
-            'AhmadNurHidayat-23.github.io',
-            'Siroyo',
+            'Pweb', 'WEB_FILM', 'Movix_v2', 'Movix_Fix', 'AhmadNurHidayat-23.github.io', 'Siroyo',
+            'rupakata-pembuat-poster-tipografi', 'passcraft-secure-password-generator',
+            'paletteforge-generator-palet-warna', 'taskly-sistem-manajemen-tugas',
+            'shortify-sistem-penyingkat-tautan', 'devlinks-sistem-manajemen-tautan-profil',
         ];
 
         $homeResponse = $this->get('/');
@@ -117,6 +123,47 @@ class GitHubProjectsTest extends TestCase
         }
     }
 
+    public function test_unlisted_and_new_repositories_are_excluded_from_curated_showcase(): void
+    {
+        Http::fake([
+            'https://api.github.com/users/*/repos*' => Http::response([
+                [
+                    'id' => 9999901,
+                    'name' => 'rupakata-pembuat-poster-tipografi',
+                    'full_name' => 'AhmadNurHidayat-23/rupakata-pembuat-poster-tipografi',
+                    'description' => 'Poster generator',
+                    'html_url' => 'https://github.com/AhmadNurHidayat-23/rupakata-pembuat-poster-tipografi',
+                ],
+                [
+                    'id' => 9999902,
+                    'name' => 'unlisted-brand-new-repo',
+                    'full_name' => 'AhmadNurHidayat-23/unlisted-brand-new-repo',
+                    'description' => 'Unlisted repo',
+                    'html_url' => 'https://github.com/AhmadNurHidayat-23/unlisted-brand-new-repo',
+                ],
+                [
+                    'id' => 1440513304,
+                    'name' => 'my-portfolio',
+                    'full_name' => 'AhmadNurHidayat-23/my-portfolio',
+                    'description' => 'Website portofolio pribadi untuk menampilkan profil, keahlian, dan proyek pengembangan web.',
+                    'html_url' => 'https://github.com/AhmadNurHidayat-23/my-portfolio',
+                ],
+            ], 200),
+            'https://api.github.com/*' => Http::response([], 200),
+        ]);
+
+        $service = app(GitHubRepositoryService::class);
+        $projects = $service->getAll(forceRefresh: true);
+
+        $names = collect($projects)->pluck('name')->all();
+        $this->assertNotContains('rupakata-pembuat-poster-tipografi', $names);
+        $this->assertNotContains('unlisted-brand-new-repo', $names);
+        $this->assertContains('my-portfolio', $names);
+
+        $this->get('/projects/unlisted-brand-new-repo')->assertStatus(404);
+        $this->get('/projects/rupakata-pembuat-poster-tipografi')->assertStatus(404);
+    }
+
     public function test_project_detail_page_renders_valid_project_data_and_next_project_link(): void
     {
         $response = $this->get('/projects/simaul');
@@ -135,23 +182,6 @@ class GitHubProjectsTest extends TestCase
         $response = $this->get('/projects/this-repository-does-not-exist-12345');
 
         $response->assertStatus(404);
-    }
-
-    public function test_api_failure_falls_back_gracefully_without_crashing(): void
-    {
-        Http::fake([
-            'https://api.github.com/*' => Http::response('API Rate Limit Exceeded', 403),
-        ]);
-
-        $service = app(GitHubRepositoryService::class);
-        $repos = $service->getAll();
-
-        $this->assertIsArray($repos);
-        $this->assertNotEmpty($repos);
-
-        $response = $this->get('/');
-        $response->assertStatus(200);
-        $response->assertSee('SIMAUL — Sistem Manajemen Usaha Layanan');
     }
 
     public function test_artisan_refresh_command_synchronizes_repositories(): void

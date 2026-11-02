@@ -57,6 +57,12 @@ return [
         'AhmadNurHidayat-23.github.io',
         'Siroyo',
         'AhmadNurHidayat-23',
+        'rupakata-pembuat-poster-tipografi',
+        'passcraft-secure-password-generator',
+        'paletteforge-generator-palet-warna',
+        'taskly-sistem-manajemen-tugas',
+        'shortify-sistem-penyingkat-tautan',
+        'devlinks-sistem-manajemen-tautan-profil',
     ],
 
     /*

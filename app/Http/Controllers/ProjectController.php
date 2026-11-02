@@ -37,7 +37,7 @@ class ProjectController extends Controller
         GitHubRepositoryService $gitHubService,
         ProjectCurationService $curationService
     ): View {
-        if ($curationService->isRepositoryHidden($slug)) {
+        if ($curationService->isRepositoryHidden($slug) || ! $curationService->isRepositoryAllowed($slug)) {
             abort(404, 'Project not found');
         }
 

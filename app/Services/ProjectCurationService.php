@@ -11,16 +11,17 @@ use Illuminate\Support\Str;
 class ProjectCurationService
 {
     /**
-     * Organize projects placing the top 9 priority projects first, then all others.
-     * Excludes repositories marked as hidden in configuration.
+     * Organize projects placing priority showcase first, then all curated others.
      *
      * @param  array<int, array<string, mixed>>  $repos
      * @return array<int, array<string, mixed>>
      */
     public function applyPriorityAndCuration(array $repos, string $defaultUsername): array
     {
-        // Exclude hidden repositories at the source
-        $repos = array_values(array_filter($repos, fn (array $r): bool => ! $this->isRepositoryHidden($r)));
+        $repos = array_values(array_filter(
+            $repos,
+            fn (array $r): bool => ! $this->isRepositoryHidden($r) && $this->isRepositoryAllowed($r)
+        ));
 
         $priorityOrder = (array) config('projects.priority_order', []);
         $curatedMap = (array) config('projects.curated', []);
@@ -45,6 +46,10 @@ class ProjectCurationService
                     break;
                 }
             }
+
+            $coverImage = (! empty($curated['cover_image']) && File::exists(public_path($curated['cover_image'])))
+                ? asset($curated['cover_image'])
+                : ($this->resolveProjectImage($curated['name'], $prioritySlug) ?? ($foundRepo['image_url'] ?? null));
 
             $prioritySection[] = [
                 'id' => $foundRepo['id'] ?? crc32($prioritySlug),
@@ -76,9 +81,7 @@ class ProjectCurationService
                 'default_branch' => $foundRepo['default_branch'] ?? 'main',
                 'license_name' => $foundRepo['license_name'] ?? null,
                 'topics' => $foundRepo['topics'] ?? [],
-                'image_url' => (! empty($curated['cover_image']) && File::exists(public_path($curated['cover_image'])))
-                    ? asset($curated['cover_image'])
-                    : ($this->resolveProjectImage($curated['name'], $prioritySlug) ?? ($foundRepo['image_url'] ?? null)),
+                'image_url' => $coverImage,
                 'image_type' => $curated['image_type'] ?? 'web',
                 'gallery_images' => array_map(
                     fn (string $path) => str_starts_with($path, 'http') ? $path : asset($path),
@@ -103,20 +106,31 @@ class ProjectCurationService
         $remaining = collect($repos)
             ->filter(fn (array $r) => ! in_array($r['id'] ?? 0, $matchedRepoIds, true))
             ->sortByDesc(fn (array $r): int => Carbon::parse($r['updated_at'] ?? now())->timestamp)
-            ->map(function (array $r) use ($seedMap): array {
+            ->map(function (array $r) use ($seedMap, $curatedMap): array {
+                $rName = Str::lower((string) ($r['name'] ?? ''));
+                $rSlug = Str::lower((string) ($r['slug'] ?? ''));
+
                 $r['is_priority'] = false;
                 $r['category'] = $r['category'] ?? ($r['language'] ? "{$r['language']} Project" : 'Software Project');
                 $r['technology'] = $r['technology'] ?? ($r['language'] ?? 'Web Technology');
+
                 $img = $this->resolveProjectImage((string) ($r['name'] ?? ''), (string) ($r['slug'] ?? '')) ?? ($r['image_url'] ?? null);
                 $r['image_url'] = $img;
                 $r['image_type'] = $r['image_type'] ?? 'web';
                 $r['gallery_images'] = $img ? [$img] : [];
 
-                $rName = Str::lower((string) ($r['name'] ?? ''));
-                $rSlug = Str::lower((string) ($r['slug'] ?? ''));
                 $seed = $seedMap[$rSlug] ?? $seedMap[$rName] ?? null;
                 if ($seed && ! empty($seed['description'])) {
                     $r['description'] = $seed['description'];
+                }
+
+                $curatedItem = $curatedMap[$rSlug] ?? $curatedMap[$rName] ?? null;
+                if ($curatedItem) {
+                    foreach (['description', 'overview', 'features', 'technical'] as $field) {
+                        if (! empty($curatedItem[$field])) {
+                            $r[$field] = $curatedItem[$field];
+                        }
+                    }
                 }
 
                 return $r;
@@ -128,45 +142,66 @@ class ProjectCurationService
     }
 
     /**
-     * Determine if a repository is in the hidden list based on its name, slug, or full_name.
+     * Determine if a repository is in the curated allowlist.
+     *
+     * @param  array<string, mixed>|string  $repo
+     */
+    public function isRepositoryAllowed(array|string $repo): bool
+    {
+        if ($this->isRepositoryHidden($repo)) {
+            return false;
+        }
+
+        $curatedList = (array) config('projects.curated_repositories', config('projects.allowed_repositories', []));
+        $priorityOrder = (array) config('projects.priority_order', []);
+        $curatedMeta = (array) config('projects.curated', []);
+
+        $allowedTargets = array_merge($curatedList, $priorityOrder, array_keys($curatedMeta));
+        foreach ($curatedMeta as $meta) {
+            if (! empty($meta['matched_repos']) && is_array($meta['matched_repos'])) {
+                $allowedTargets = array_merge($allowedTargets, $meta['matched_repos']);
+            }
+        }
+
+        return $this->matchesRepoList($repo, $allowedTargets);
+    }
+
+    /**
+     * Determine if a repository is excluded from public showcase.
      *
      * @param  array<string, mixed>|string  $repo
      */
     public function isRepositoryHidden(array|string $repo): bool
     {
         $hiddenList = (array) config('portfolio.hidden_repositories', config('projects.hidden_repositories', []));
-        if (empty($hiddenList)) {
+
+        return $this->matchesRepoList($repo, $hiddenList);
+    }
+
+    /**
+     * @param  array<string, mixed>|string  $repo
+     * @param  array<int, string>  $targetList
+     */
+    protected function matchesRepoList(array|string $repo, array $targetList): bool
+    {
+        if (empty($targetList)) {
             return false;
         }
 
-        $candidates = [];
-        if (is_array($repo)) {
-            if (! empty($repo['name'])) {
-                $candidates[] = (string) $repo['name'];
-            }
-            if (! empty($repo['slug'])) {
-                $candidates[] = (string) $repo['slug'];
-            }
-            if (! empty($repo['full_name'])) {
-                $parts = explode('/', (string) $repo['full_name']);
-                $candidates[] = end($parts);
-            }
-        } else {
-            $candidates[] = $repo;
-        }
-
+        $candidates = $this->extractCandidates($repo);
         $normalize = static fn (string $val): string => Str::lower(preg_replace('/[^a-zA-Z0-9]/', '', $val) ?? '');
-        $normalizedHidden = array_map($normalize, $hiddenList);
+        $normalizedTargets = array_map($normalize, $targetList);
 
         foreach ($candidates as $candidate) {
             $candidateNorm = $normalize($candidate);
-            if ($candidateNorm !== '' && in_array($candidateNorm, $normalizedHidden, true)) {
+            if ($candidateNorm !== '' && in_array($candidateNorm, $normalizedTargets, true)) {
                 return true;
             }
 
             $candidateLower = Str::lower(trim($candidate));
-            foreach ($hiddenList as $hidden) {
-                if (Str::lower(trim($hidden)) === $candidateLower || Str::slug($hidden) === $candidateLower) {
+            foreach ($targetList as $target) {
+                $targetStr = (string) $target;
+                if (Str::lower(trim($targetStr)) === $candidateLower || Str::slug($targetStr) === $candidateLower) {
                     return true;
                 }
             }
@@ -175,36 +210,48 @@ class ProjectCurationService
         return false;
     }
 
+    /**
+     * @param  array<string, mixed>|string  $repo
+     * @return array<int, string>
+     */
+    protected function extractCandidates(array|string $repo): array
+    {
+        if (! is_array($repo)) {
+            return [trim((string) $repo)];
+        }
+
+        $candidates = [];
+        if (! empty($repo['name'])) {
+            $candidates[] = (string) $repo['name'];
+        }
+        if (! empty($repo['slug'])) {
+            $candidates[] = (string) $repo['slug'];
+        }
+        if (! empty($repo['full_name'])) {
+            $parts = explode('/', (string) $repo['full_name']);
+            $candidates[] = end($parts);
+        }
+
+        return array_values(array_filter($candidates));
+    }
+
     public function resolveProjectImage(string $name, ?string $slug = null): ?string
     {
         $slug = $slug ?: Str::slug($name);
         $extensions = ['png', 'jpg', 'jpeg', 'webp'];
         $variants = array_unique(array_filter([
-            $slug,
-            Str::slug($name),
-            Str::slug($slug),
-            Str::lower($name),
-            Str::lower($slug),
-            Str::replace('_', '-', Str::lower($name)),
-            Str::replace('_', '-', Str::lower($slug)),
-            Str::replace('-', '_', Str::lower($name)),
-            Str::replace('-', '_', Str::lower($slug)),
-            Str::snake($name),
-            Str::snake($slug),
-            $name,
+            $slug, Str::slug($name), Str::slug($slug), Str::lower($name), Str::lower($slug),
+            Str::replace('_', '-', Str::lower($name)), Str::replace('_', '-', Str::lower($slug)),
+            Str::replace('-', '_', Str::lower($name)), Str::replace('-', '_', Str::lower($slug)),
+            Str::snake($name), Str::snake($slug), $name,
         ]));
 
         foreach ($variants as $variant) {
             foreach ($extensions as $ext) {
-                if (File::exists(public_path("images/projects/{$variant}/dashboard.{$ext}"))) {
-                    return asset("images/projects/{$variant}/dashboard.{$ext}");
-                }
-                if (File::exists(public_path("images/projects/{$variant}/cover.{$ext}"))) {
-                    return asset("images/projects/{$variant}/cover.{$ext}");
-                }
-                $filename = "{$variant}.{$ext}";
-                if (File::exists(public_path("images/projects/{$filename}"))) {
-                    return asset("images/projects/{$filename}");
+                foreach (["{$variant}/dashboard.{$ext}", "{$variant}/cover.{$ext}", "{$variant}.{$ext}"] as $subPath) {
+                    if (File::exists(public_path("images/projects/{$subPath}"))) {
+                        return asset("images/projects/{$subPath}");
+                    }
                 }
             }
         }
