@@ -18,6 +18,10 @@ class GitHubRepositoryService
 
     public const FALLBACK_CACHE_KEY = 'github_repositories_ahmadnurhidayat_fallback';
 
+    public const TOTAL_COUNT_CACHE_KEY = 'github_total_repositories_ahmadnurhidayat';
+
+    public const TOTAL_COUNT_FALLBACK_KEY = 'github_total_repositories_ahmadnurhidayat_fallback';
+
     public const CACHE_TTL_MINUTES = 60;
 
     public const GITHUB_API_URL = 'https://api.github.com';
@@ -68,6 +72,44 @@ class GitHubRepositoryService
     {
         Cache::forget(self::CACHE_KEY);
         Cache::forget(self::FALLBACK_CACHE_KEY);
+        Cache::forget(self::TOTAL_COUNT_CACHE_KEY);
+        Cache::forget(self::TOTAL_COUNT_FALLBACK_KEY);
+    }
+
+    /**
+     * Get the dynamic total number of public GitHub repositories for the user.
+     */
+    public function getTotalRepositoryCount(bool $forceRefresh = false): int
+    {
+        if (! $forceRefresh) {
+            $cached = Cache::get(self::TOTAL_COUNT_CACHE_KEY);
+            if (is_numeric($cached) && (int) $cached > 0) {
+                return (int) $cached;
+            }
+        }
+
+        try {
+            $res = $this->httpClient()->get(self::GITHUB_API_URL."/users/{$this->username}");
+            if ($res->successful()) {
+                $publicRepos = $res->json('public_repos');
+                if (is_numeric($publicRepos) && (int) $publicRepos > 0) {
+                    $count = (int) $publicRepos;
+                    Cache::put(self::TOTAL_COUNT_CACHE_KEY, $count, now()->addMinutes(self::CACHE_TTL_MINUTES));
+                    Cache::put(self::TOTAL_COUNT_FALLBACK_KEY, $count, now()->addDays(30));
+
+                    return $count;
+                }
+            }
+        } catch (Throwable $e) {
+            Log::warning('GitHub public_repos fetch failed: '.$e->getMessage(), ['user' => $this->username]);
+        }
+
+        $fallback = Cache::get(self::TOTAL_COUNT_FALLBACK_KEY);
+        if (is_numeric($fallback) && (int) $fallback > 0) {
+            return (int) $fallback;
+        }
+
+        return count($this->curationService->loadSeedFallback());
     }
 
     /**

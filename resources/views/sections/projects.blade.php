@@ -1,9 +1,10 @@
 @props([
     'projects' => [],
+    'totalRepositoriesCount' => null,
 ])
 
 @php
-    $totalCount = count($projects);
+    $totalCount = $totalRepositoriesCount ?? count($projects);
 @endphp
 
 <section class="projects-editorial-section" id="projects">

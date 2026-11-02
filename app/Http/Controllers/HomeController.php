@@ -21,11 +21,13 @@ class HomeController extends Controller
         }
 
         $projects = $gitHubService->getAll($force);
+        $totalRepositoriesCount = $gitHubService->getTotalRepositoryCount($force);
         $certificates = config('certificates.items', []);
         $services = config('portfolio.services', []);
 
         return view('pages.home', [
             'projects' => $projects,
+            'totalRepositoriesCount' => $totalRepositoriesCount,
             'certificates' => $certificates,
             'services' => $services,
         ]);

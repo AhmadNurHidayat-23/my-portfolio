@@ -23,9 +23,11 @@ class ProjectController extends Controller
         }
 
         $projects = $gitHubService->getAll($force);
+        $totalRepositoriesCount = $gitHubService->getTotalRepositoryCount($force);
 
         return view('pages.projects.index', [
             'projects' => $projects,
+            'totalRepositoriesCount' => $totalRepositoriesCount,
         ]);
     }
 

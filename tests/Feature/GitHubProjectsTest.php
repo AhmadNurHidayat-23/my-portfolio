@@ -16,9 +16,8 @@ class GitHubProjectsTest extends TestCase
         parent::setUp();
         Cache::forget(GitHubRepositoryService::CACHE_KEY);
         Cache::forget(GitHubRepositoryService::FALLBACK_CACHE_KEY);
-        Http::fake([
-            'https://api.github.com/*' => Http::response('Mocked Fallback', 403),
-        ]);
+        Cache::forget(GitHubRepositoryService::TOTAL_COUNT_CACHE_KEY);
+        Cache::forget(GitHubRepositoryService::TOTAL_COUNT_FALLBACK_KEY);
     }
 
     public function test_home_page_renders_selected_work_section_with_all_repositories(): void
@@ -29,6 +28,7 @@ class GitHubProjectsTest extends TestCase
         $response->assertSee('03 / Works');
         $response->assertSee('Selected Work.');
         $response->assertSee("A collection of things I've built.", false);
+        $response->assertSee('19 Repositories');
         $response->assertSee('SIMAUL — Sistem Manajemen Usaha Layanan');
         $response->assertSee('SIMAUL Mobile');
         $response->assertSee('Atur Uang Apps');
@@ -57,7 +57,7 @@ class GitHubProjectsTest extends TestCase
         $service = app(GitHubRepositoryService::class);
         $projects = $service->getAll();
 
-        $this->assertGreaterThanOrEqual(9, count($projects));
+        $this->assertCount(12, $projects);
         $this->assertSame('SIMAUL — Sistem Manajemen Usaha Layanan', $projects[0]['name']);
         $this->assertSame('SIMAUL Mobile', $projects[1]['name']);
         $this->assertSame('Sistem Pemasaran Otomatis Terpadu', $projects[2]['name']);
@@ -75,7 +75,7 @@ class GitHubProjectsTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('All Public Projects.');
-        $response->assertSee('Showing all 12 Repositories');
+        $response->assertSee('Showing all 19 Repositories');
         $response->assertSee('SIMAUL — Sistem Manajemen Usaha Layanan');
         $response->assertSee('my-portfolio');
         $response->assertSee('Website portofolio pribadi untuk menampilkan profil, keahlian, dan proyek pengembangan web.');
@@ -107,7 +107,6 @@ class GitHubProjectsTest extends TestCase
 
         $homeResponse = $this->get('/');
         $homeResponse->assertStatus(200);
-        $homeResponse->assertSee('12 Repositories');
 
         $projectsResponse = $this->get('/projects');
         $projectsResponse->assertStatus(200);
@@ -118,14 +117,13 @@ class GitHubProjectsTest extends TestCase
         }
 
         foreach ($hiddenSlugs as $slug) {
-            $detailResponse = $this->get("/projects/{$slug}");
-            $detailResponse->assertStatus(404);
+            $this->get("/projects/{$slug}")->assertStatus(404);
         }
     }
 
     public function test_unlisted_and_new_repositories_are_excluded_from_curated_showcase(): void
     {
-        Http::fake([
+        $this->resetHttpFake([
             'https://api.github.com/users/*/repos*' => Http::response([
                 [
                     'id' => 9999901,
@@ -145,10 +143,11 @@ class GitHubProjectsTest extends TestCase
                     'id' => 1440513304,
                     'name' => 'my-portfolio',
                     'full_name' => 'AhmadNurHidayat-23/my-portfolio',
-                    'description' => 'Website portofolio pribadi untuk menampilkan profil, keahlian, dan proyek pengembangan web.',
+                    'description' => 'Website portofolio pribadi.',
                     'html_url' => 'https://github.com/AhmadNurHidayat-23/my-portfolio',
                 ],
             ], 200),
+            'https://api.github.com/users/*' => Http::response(['public_repos' => 22], 200),
             'https://api.github.com/*' => Http::response([], 200),
         ]);
 
@@ -162,6 +161,37 @@ class GitHubProjectsTest extends TestCase
 
         $this->get('/projects/unlisted-brand-new-repo')->assertStatus(404);
         $this->get('/projects/rupakata-pembuat-poster-tipografi')->assertStatus(404);
+    }
+
+    public function test_dynamic_repository_count_differs_from_curated_cards_count(): void
+    {
+        $this->resetHttpFake([
+            'https://api.github.com/users/*/repos*' => Http::response([], 403),
+            'https://api.github.com/users/*' => Http::response(['public_repos' => 25], 200),
+            'https://api.github.com/*' => Http::response([], 403),
+        ]);
+
+        $response = $this->get('/?refresh=1');
+        $response->assertStatus(200);
+        $response->assertSee('25 Repositories');
+
+        $service = app(GitHubRepositoryService::class);
+        $curatedProjects = $service->getAll();
+
+        $this->assertCount(12, $curatedProjects);
+        $this->assertSame(25, $service->getTotalRepositoryCount());
+    }
+
+    public function test_dynamic_count_falls_back_to_cached_count_on_api_failure(): void
+    {
+        Cache::put(GitHubRepositoryService::TOTAL_COUNT_CACHE_KEY, 23, 60);
+
+        $this->resetHttpFake([
+            'https://api.github.com/*' => Http::response('Server Error', 500),
+        ]);
+
+        $service = app(GitHubRepositoryService::class);
+        $this->assertSame(23, $service->getTotalRepositoryCount());
     }
 
     public function test_project_detail_page_renders_valid_project_data_and_next_project_link(): void
@@ -179,9 +209,7 @@ class GitHubProjectsTest extends TestCase
 
     public function test_project_detail_page_returns_404_for_unknown_slug(): void
     {
-        $response = $this->get('/projects/this-repository-does-not-exist-12345');
-
-        $response->assertStatus(404);
+        $this->get('/projects/this-repository-does-not-exist-12345')->assertStatus(404);
     }
 
     public function test_artisan_refresh_command_synchronizes_repositories(): void

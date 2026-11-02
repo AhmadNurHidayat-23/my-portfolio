@@ -13,7 +13,10 @@
         @include('sections.skills')
 
         {{-- Editorial Selected Work Section (All GitHub Repositories) --}}
-        @include('sections.projects', ['projects' => $projects])
+        @include('sections.projects', [
+            'projects' => $projects,
+            'totalRepositoriesCount' => $totalRepositoriesCount ?? null,
+        ])
 
         {{-- Editorial Certificates Section --}}
         @include('sections.certificates', ['certificates' => $certificates ?? []])

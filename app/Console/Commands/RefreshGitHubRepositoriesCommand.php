@@ -33,6 +33,7 @@ class RefreshGitHubRepositoriesCommand extends Command
 
         $this->info('Fetching updated repositories from GitHub API & collaborations...');
         $repositories = $service->getAll(forceRefresh: true);
+        $totalCount = $service->getTotalRepositoryCount(forceRefresh: true);
 
         if (empty($repositories)) {
             $this->warn('No repositories were retrieved. Please check API rate limits or network.');

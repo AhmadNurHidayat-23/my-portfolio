@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $totalCount = count($projects);
+    $totalCount = $totalRepositoriesCount ?? count($projects);
 @endphp
 
 @section('title', 'All Projects — Ahmad Nur Hidayat | Web & Mobile Developer')
