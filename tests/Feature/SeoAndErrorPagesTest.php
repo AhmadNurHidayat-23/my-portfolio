@@ -22,6 +22,24 @@ class SeoAndErrorPagesTest extends TestCase
         $response->assertSee('<meta name="twitter:card" content="summary_large_image"', false);
     }
 
+    public function test_homepage_exposes_valid_person_data_with_only_verified_profiles(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $document = new \DOMDocument;
+        @$document->loadHTML($response->getContent());
+        $nodes = (new \DOMXPath($document))->query('//script[@type="application/ld+json"]');
+        $this->assertSame(1, $nodes->length);
+        $person = json_decode($nodes->item(0)->textContent, true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame('https://schema.org', $person['@context']);
+        $this->assertSame('Person', $person['@type']);
+        $this->assertSame('https://ahmadnurhidayat.vercel.app/#person', $person['@id']);
+        $this->assertSame('Ahmad Nur Hidayat', $person['name']);
+        $this->assertSame('https://ahmadnurhidayat.vercel.app/', $person['url']);
+        $this->assertSame(['https://github.com/AhmadNurHidayat-23'], $person['sameAs']);
+    }
+
     public function test_project_detail_renders_project_specific_meta_tags(): void
     {
         $response = $this->get('/projects/simaul');
