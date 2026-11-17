@@ -16,6 +16,18 @@
         $pageImage = View::hasSection('image') ? trim(View::yieldContent('image')) : ($image ?? asset('images/ahmad-portrait-cutout.png'));
         $canonicalUrl = $canonical ?? url()->current();
         $siteName = 'Ahmad Nur Hidayat — Portfolio';
+        $personSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Person',
+        '@id' => 'https://ahmadnurhidayat.vercel.app/#person',
+        'name' => 'Ahmad Nur Hidayat',
+        'url' => 'https://ahmadnurhidayat.vercel.app/',
+        'jobTitle' => 'Web Developer & Programmer',
+        'image' => 'https://ahmadnurhidayat.vercel.app/images/ahmad-portrait-cutout.png',
+        'sameAs' => [
+            'https://github.com/AhmadNurHidayat-23',
+        ],
+    ];
     @endphp
 
     <title>{{ $pageTitle }}</title>
@@ -36,6 +48,9 @@
     <meta name="twitter:title" content="{{ $pageTitle }}">
     <meta name="twitter:description" content="{{ $pageDescription }}">
     <meta name="twitter:image" content="{{ $pageImage }}">
+
+    {{-- Non-executable structured identity data for search engines. --}}
+    <script type="application/ld+json">{!! json_encode($personSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_THROW_ON_ERROR) !!}</script>
 
     {{-- Portfolio Favicon (Final Logo TAB) --}}
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}?v=20261031c">
